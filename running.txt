@@ -1,0 +1,12 @@
+for game in gameids:
+	select perminlogs where gameID = game;
+	select permin_averages for players in perminlogs
+	for player in selected playerlogs
+		perminlogs - permin_averages = 
+		
+		
+		
+		
+create a data frame with player name id  and statistical categories 
+
+

@@ -1,0 +1,112 @@
+UPDATE perminLog SET fgm = fgm/secs*60;
+UPDATE perminLog SET fga = fga/secs*60;
+UPDATE perminLog SET threemd = threemd/secs*60;
+UPDATE perminLog SET threeatt = threeatt/secs*60;
+UPDATE perminLog SET ftm = ftm/secs*60;
+UPDATE perminLog SET fta = fta/secs*60;
+UPDATE perminLog SET oreb = oreb/secs*60;
+UPDATE perminLog SET dreb = dreb/secs*60;
+UPDATE perminLog SET reb = reb/secs*60;
+UPDATE perminLog SET ast = ast/secs*60;
+UPDATE perminLog SET stl = stl/secs*60;
+UPDATE perminLog SET blk = blk/secs*60;
+UPDATE perminLog SET tov = tov/secs*60;
+UPDATE perminLog SET pf = pf/secs*60;
+
+
+
+
+SELECT
+ playerLog.playerName, playerLog.mins, playerLog.pts, perminLog.pts
+FROM playerLog
+ JOIN
+     perminLog
+ on playerLog.playerID = perminLog.playerID 
+    AND playerLog.gameID = perminLog.gameID 
+LIMIT 10;
+
+
+SELECT  
+	playerLog.playerName, playerLog.mins, playerLog.pts, perminLog.pts 
+FROM playerLog  
+JOIN      
+	perminLog  
+ON playerLog.playerID = perminLog.playerID      
+	AND playerLog.gameID = perminLog.gameID  
+WHERE playerLog.Mins > 2000 
+ORDER BY perminLog.pts DESC 
+LIMIT 10;
+
+
+SELECT  
+	playerLog.playerName, players.position, playerLog.mins, playerLog.pts, perminLog.pts 
+FROM playerLog  
+JOIN perminLog  
+ON playerLog.playerID = perminLog.playerID      
+	AND playerLog.gameID = perminLog.gameID  
+JOIN players
+ON playerLog.playerID = players.PlayerID
+
+WHERE playerLog.Mins > 2000 
+ORDER BY perminLog.pts DESC 
+LIMIT 10;
+
+SELECT  
+	playerLog.team_id, players.position, SUM(playerLog.secs)/60, playerLog.pts, SUM(perminLog.pts) AVG(perminLog.pts) 
+FROM playerLog  
+JOIN perminLog  
+ON playerLog.playerID = perminLog.playerID      
+	AND playerLog.gameID = perminLog.gameID  
+JOIN players
+ON playerLog.playerID = players.PlayerID
+
+WHERE playerLog.Mins > 2000 
+GROUP BY playerLog.team_id
+	AND players.position
+ORDER BY SUM(perminLog.pts) DESC 
+LIMIT 20;
+
+
+
+
+
+
+SELECT 
+	gameID, team_id, SUM(secs) AS time , SUM(pts)
+FROM playerLog
+GROUP BY gameID, team_ID
+HAVING time = 14400
+ORDER BY SUM(pts) DESC
+LIMIT 10;
+
+
+
+ALTER TABLE players
+ADD pos VARCHAR(4);
+
+INSERT INTO players (pos)
+SELECT pos.position
+FROM pos
+JOIN playerLog
+ON playerLog.playerName = pos.name
+JOIN players
+ON players.playerID = playerLog.playerID;
+
+
+
+UPDATE players
+SET pos = pos.position = (SELECT DISTINCT pos.position, players.playerID FROM pos 
+JOIN playerLog 
+ON playerLog.playerName = pos.name 
+JOIN players 
+ON players.playerID = playerLog.playerID);
+
+
+create table mergedPlayer as select distinct pk.playerID, pk.first_name, pk.last_name, pk.birthdate, pk.season_exp, pk.current_team, pk.position, pk.height, pk.from_year, pk.to_year, posK.position as pos from playerLogK join playersK as pk on playerLogK.playerID=pk.playerID join posK on posK.name=playerLogK.playerName;
+
+
+
+mysql> SELECT * from playerLog AS pl JOIN player_info AS pi ON pl.playerID=pi.playerID JOIN games AS g ON g.gameID= pl.gameID;
+
+
+SELECT * pl.playerID, pl.team_id, pl.gameID,  from playerLog AS pl JOIN player_info AS pi ON pl.playerID=pi.playerID JOIN games AS g ON g.gameID= pl.gameID;
