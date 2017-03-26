@@ -3,9 +3,9 @@ from lib import players
 
 class Database:
 
-    host = 'dev-db.cycgavlmx4or.us-east-1.rds.amazonaws.com'
-    user = 'admin'
-    password = 'Look4more'
+    host = ''
+    user = ''
+    password = ''
     db = 'mydb'
 
     def __init__(self):
